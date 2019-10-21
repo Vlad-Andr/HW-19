@@ -14,15 +14,9 @@ import twitter4j.TwitterException;
 @RequestMapping("twitter")
 public class TwitterController {
 
-    @GetMapping(name = "/feed",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(path = "/feed", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> feed() {
         ConnectableFlux<Status> flux = TwitterService.getTwitterStream();
-        return flux.map(Status::getText);
-    }
-
-    @GetMapping("getTimeline")
-    public  Flux<String> gettingTimeline() throws TwitterException {
-        ConnectableFlux all = TwitterService.gettingTimeline();
-        return all;
+        return flux.map(status -> status.getText());
     }
 }

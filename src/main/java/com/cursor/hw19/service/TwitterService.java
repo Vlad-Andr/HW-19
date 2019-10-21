@@ -26,12 +26,12 @@ public class TwitterService {
     }
 
     private static void initTwitterStream() {
-        Flux<Status> stream = Flux.create(emmiter -> {
+        Flux<Status> stream = Flux.create(emitter -> {
             StatusListener listener = new StatusListener() {
 
                 @Override
                 public void onException(Exception e) {
-                    emmiter.error(e);
+                    emitter.error(e);
                 }
 
                 @Override
@@ -48,7 +48,7 @@ public class TwitterService {
 
                 @Override
                 public void onStatus(Status status) {
-                    emmiter.next(status);
+                    emitter.next(status);
                 }
 
                 @Override
@@ -71,16 +71,6 @@ public class TwitterService {
         });
         twitterStream = stream.publish();
         twitterStream.connect();
-    }
-
-    public static ConnectableFlux gettingTimeline() throws TwitterException {
-        Twitter twitter = TwitterFactory.getSingleton();
-        List<Status> statuses = twitter.getHomeTimeline();
-        System.out.println("Showing home timeline.");
-        for (Status status : statuses) {
-            System.out.println(status.getUser().getName() + ":" + status.getText());
-        }
-        return null;
     }
 }
 
